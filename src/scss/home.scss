@@ -1,0 +1,97 @@
+//====================================================================================================
+.page {
+	@media (min-width: $mobile) {
+		display: grid;
+		grid-template-columns: 42% 1fr;
+	}
+}
+
+.animation-layout {
+	background: linear-gradient(#fff2d9 0%, #f5d6b8 100%);
+
+	@media (max-width: $mobile) {
+		display: none;
+	}
+}
+
+.section {
+	height: max(100vh, rem(960));
+	@media (max-width: $mobile) {
+		display: grid;
+		grid-template-rows: 1fr 1fr;
+	}
+
+	&__image-layout {
+		position: relative;
+		background: linear-gradient(139deg, #fff2d9 0%, #f5d6b8 100%);
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		@media (min-width: $mobile) {
+			display: none;
+		}
+	}
+
+	&__image-ibg {
+		position: absolute;
+		inset: rem(68) rem(32);
+
+		img {
+			object-fit: contain;
+		}
+	}
+
+	&__body {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+
+		@media (max-width: $mobile) {
+			padding: rem(32) 0 rem(80);
+		}
+	}
+
+	&__container {
+		@include adaptiveValue('padding-left', 120, 20, 0, 1440, 768);
+		@include adaptiveValue('padding-right', 80, 18, 0, 1440, 768);
+		height: 100%;
+	}
+
+	&__text-wrapper {
+		&:not(:last-child) {
+			margin-bottom: rem(30);
+		}
+	}
+
+	&__title {
+		color: cl('black');
+		@include adaptiveValue('font-size', 45, 35, 0, 1440, 768);
+		font-weight: 600;
+		line-height: 125%;
+
+		&:not(:last-child) {
+			margin-bottom: rem(20);
+		}
+	}
+
+	&__text {
+		color: cl('txt-1');
+		font-size: rem(16);
+		font-weight: 400;
+		line-height: 160%;
+	}
+
+	&__button {
+		justify-self: flex-start;
+
+		@media (max-width: $mobileSmall) {
+			width: 100%;
+		}
+	}
+}
+
+//====================================================================================================

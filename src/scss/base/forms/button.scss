@@ -1,0 +1,24 @@
+//<BUTTONS (a.btn+tab)>
+// Сниппет (HTML): btn
+
+.button {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+
+	padding: rem(18) rem(60);
+	background-color: cl('main');
+	border-radius: rem(6);
+
+	color: cl('button-text');
+	font-size: rem(16);
+	font-weight: 500;
+	line-height: 160%;
+
+	transition: all 0.3s ease;
+	@media (any-hover: hover) {
+		&:hover {
+			transform: scale(1.2);
+		}
+	}
+}
