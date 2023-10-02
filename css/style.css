@@ -206,6 +206,7 @@ h6 {
 
 .header {
   position: fixed;
+  z-index: 2;
   top: 0;
   left: 0;
   width: 100%;
@@ -220,6 +221,9 @@ h6 {
   background: -webkit-gradient(linear, left top, left bottom, color-stop(62.5%, #fcfbfa), to(rgba(252, 251, 250, 0)));
   background: -o-linear-gradient(top, #fcfbfa 62.5%, rgba(252, 251, 250, 0) 100%);
   background: linear-gradient(180deg, #fcfbfa 62.5%, rgba(252, 251, 250, 0) 100%);
+  -webkit-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .header__body {
@@ -746,6 +750,15 @@ html.has-scroll-dragging {
 }
 
 @media (max-width: 47.99875em) {
+  .header__gradient {
+    width: 100%;
+    display: none;
+  }
+
+  ._header-scroll .header__gradient {
+    display: block;
+  }
+
   .footer__body {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
