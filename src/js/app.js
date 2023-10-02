@@ -45,7 +45,7 @@ flsFunctions.isWebp();
 Настройка подключения плагина Accordion выполняется в файле js/libs/accordion.js
 Документация плагина: https://github.com/michu2k/Accordion
 */
-// import "./libs/accordion.js";
+import "./libs/accordion.js";
 
 /*
 Настройка подключения плагина Anime выполняется в файле js/libs/anime.js
@@ -214,7 +214,7 @@ import './libs/scrollController.js';
 // flsScroll.pageNavigation();
 // Функционал добавления классов к хедеру во время прокрутки
 // Документация: https://template.fls.guru/template-docs/modul-dobavleniya-klassov-k-shapke-pri-prokrutke-stranicy.html
-// flsScroll.headerScroll();
+flsScroll.headerScroll();
 // Анимация цифрового счетчика.
 // Документация: https://template.fls.guru/template-docs/modul-animacii-cifrovogo-lichilnika.html
 // Сниппет (HTML):

@@ -2,9 +2,17 @@
 
 .header {
 	position: fixed;
+	z-index: 2;
 	top: 0;
 	left: 0;
 	width: 100%;
+
+	&--transparent {
+		transition: all 0.3s ease;
+		&._header-scroll {
+			background-color: cl('background', 0.8);
+		}
+	}
 
 	&__gradient {
 		position: absolute;
@@ -13,6 +21,16 @@
 		width: 42%;
 		height: 160%;
 		background: linear-gradient(180deg, #fcfbfa 62.5%, rgba(252, 251, 250, 0) 100%);
+		transition: all 0.3s ease;
+
+		@media (max-width: $mobile) {
+			width: 100%;
+			display: none;
+
+			._header-scroll & {
+				display: block;
+			}
+		}
 	}
 
 	&__body {
@@ -22,8 +40,8 @@
 		justify-content: space-between;
 		align-items: center;
 
-		@include adaptiveValue("padding-top", 20, 10, 0, 1440, 768);
-		@include adaptiveValue("padding-bottom", 20, 10, 0, 1440, 768);
+		@include adaptiveValue('padding-top', 20, 10, 0, 1440, 768);
+		@include adaptiveValue('padding-bottom', 20, 10, 0, 1440, 768);
 		@include adaptiveValue('padding-left', 120, 20, 0, 1440, 768);
 		@include adaptiveValue('padding-right', 80, 18, 0, 1440, 768);
 	}

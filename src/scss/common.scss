@@ -1,1 +1,100 @@
 //Заголовки, общие БЭМ блоки и т.д.
+.breadcrumbs {
+	&__list {
+		display: flex;
+		align-items: center;
+		gap: rem(5);
+	}
+
+	&__item {
+		&:not(:last-child) {
+			&::after {
+				padding-left: rem(5);
+				content: '/';
+			}
+		}
+	}
+
+	&__link {
+		color: cl('txt-1');
+		font-size: rem(13);
+		font-weight: 400;
+		line-height: 160%;
+		text-decoration: underline;
+
+		&:hover {
+			text-decoration: none;
+		}
+
+		&--current {
+			text-decoration: none;
+		}
+	}
+}
+
+.accordion-container {
+	border-top: rem(1) solid cl('border-2');
+	border-bottom: rem(1) solid cl('border-2');
+}
+
+.accordion-wrapper {
+	padding: rem(20) 0;
+
+	&:not(:last-child) {
+		border-bottom: rem(1) solid cl('border-2');
+	}
+}
+
+.accordion {
+	overflow: hidden;
+
+	&__header {
+		._gutter & {
+			margin-bottom: rem(10);
+		}
+	}
+
+	&__title {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		gap: rem(10);
+		justify-content: space-between;
+
+		span {
+			color: cl('black');
+			font-size: rem(18);
+			font-weight: 500;
+			line-height: 140%;
+		}
+	}
+
+	&__icon {
+		width: rem(24);
+		height: rem(24);
+		fill: cl('txt-1');
+
+		&--open {
+			._open & {
+				display: none;
+			}
+		}
+
+		&--close {
+			display: none;
+
+			._open & {
+				display: block;
+			}
+		}
+	}
+
+	&__icon--open {
+	}
+
+	&__icon--close {
+	}
+
+	&__content {
+	}
+}

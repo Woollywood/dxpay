@@ -1,8 +1,14 @@
 //====================================================================================================
 .page {
-	@media (min-width: $mobile) {
-		display: grid;
-		grid-template-columns: 42% 1fr;
+	&__grid {
+		@media (min-width: $mobile) {
+			display: grid;
+			grid-template-columns: 42% 1fr;
+		}
+	}
+
+	@media (max-width: $mobile) {
+		padding-top: var(--header-height);
 	}
 }
 
@@ -90,6 +96,64 @@
 
 		@media (max-width: $mobileSmall) {
 			width: 100%;
+		}
+	}
+}
+
+.privacy-policy {
+	&__header {
+		background: linear-gradient(139deg, #fff2d9 0%, #f5d6b8 100%);
+		padding-top: calc(var(--header-height) + rem(40));
+		@media (max-width: $mobile) {
+			padding-top: calc(var(--header-height) + rem(50));
+		}
+		@include adaptiveValue('padding-bottom', 80, 60, 0, 1440, 768);
+		@include adaptiveValue('padding-left', 120, 20, 0, 1440, 768);
+		@include adaptiveValue('padding-right', 440, 20, 0, 1440, 768);
+	}
+
+	&__breadcrumbs {
+		&:not(:last-child) {
+			margin-bottom: rem(30);
+		}
+	}
+
+	&__body {
+		@include adaptiveValue('padding-left', 120, 20, 0, 1440, 768);
+		@include adaptiveValue('padding-right', 440, 20, 0, 1440, 768);
+		@include adaptiveValue('padding-top', 60, 30, 0, 1440, 768);
+		@include adaptiveValue('padding-bottom', 60, 80, 0, 1440, 768);
+	}
+
+	&__title {
+		color: cl('black');
+		@include adaptiveValue('font-size', 45, 28, 0, 1440, 768);
+		font-weight: 600;
+		line-height: 125%;
+	}
+
+	&__content {
+		h3 {
+			color: cl('black');
+			font-size: rem(20);
+			font-weight: 500;
+			line-height: 140%;
+			&:not(:last-child) {
+				margin-bottom: rem(15);
+			}
+		}
+
+		p {
+			color: cl('black');
+			font-size: rem(16);
+			font-weight: 400;
+			line-height: 160%;
+		}
+	}
+
+	&__block {
+		&:not(:last-child) {
+			margin-bottom: rem(30);
 		}
 	}
 }

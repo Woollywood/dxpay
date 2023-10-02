@@ -4,18 +4,14 @@ import { isMobile } from './functions.js';
 // Подключение списка активных модулей
 import { flsModules } from './modules.js';
 
-let sectionContainer = document.querySelector('.section');
-if (window.innerWidth <= 767.98) sectionPaddingCalculate(sectionContainer);
+let htmlElement = document.documentElement;
+sectionPaddingCalculate(htmlElement);
 window.addEventListener('resize', (e) => {
-	if (window.innerWidth <= 767.98) {
-		sectionPaddingCalculate(sectionContainer);
-	} else {
-		sectionContainer.style.paddingTop = '';
-	}
+	sectionPaddingCalculate(htmlElement);
 });
 
-function sectionPaddingCalculate(section) {
+function sectionPaddingCalculate(element) {
 	let header = document.querySelector('.header');
 	let headerBox = header.getBoundingClientRect();
-	section.style.paddingTop = `${headerBox.height}px`;
+	element.style.cssText += `--header-height: ${headerBox.height}px`;
 }
