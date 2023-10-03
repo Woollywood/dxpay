@@ -13,12 +13,38 @@ function raf(time) {
 
 requestAnimationFrame(raf);
 
-// gsap.to('.section', {
-// 	x: -100,
-// 	scrollTrigger: {
-// 		trigger: '.section',
-// 		start: 'top top',
-// 		markers: true,
-// 		scrub: true,
-// 	},
-// });
+const loadAnimation = (file) => {
+	return new Promise((resolve, reject) => {
+		const animation = bodymovin.loadAnimation({
+			container: document.getElementById('animation-layout'),
+			renderer: 'svg',
+			loop: true,
+			autoplay: true,
+			path: file,
+		});
+
+		animation.addEventListener('DOMLoaded', () => {
+			console.log('loaded');
+			resolve(animation);
+		});
+
+		animation.addEventListener('error', (error) => {
+			reject(error);
+		});
+	});
+};
+
+const PATH = '../../files/lottie/data.json';
+
+async function initLottie() {
+	if (window.innerWidth > 767.98) {
+		const sections = document.querySelectorAll('.section');
+		sections.forEach((section, index) => (section.id = `section-${index}`));
+
+		loadAnimation(PATH);
+	}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+	if (document.querySelector('#animation-sections')) initLottie();
+});

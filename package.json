@@ -24,7 +24,6 @@
 		"accordion-js": "^3.3.4",
 		"animejs": "^3.2.1",
 		"aos": "^2.3.4",
-		"bodymovin": "^4.13.0",
 		"bootstrap": "^5.3.1",
 		"chart.js": "^4.4.0",
 		"copy-webpack-plugin": "latest",
