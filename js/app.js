@@ -244,206 +244,6 @@
         __webpack_modules__[moduleId](module, module.exports, __webpack_require__);
         return module.exports;
     }
-    __webpack_require__.m = __webpack_modules__;
-    (() => {
-        __webpack_require__.d = (exports, definition) => {
-            for (var key in definition) if (__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) Object.defineProperty(exports, key, {
-                enumerable: true,
-                get: definition[key]
-            });
-        };
-    })();
-    (() => {
-        __webpack_require__.f = {};
-        __webpack_require__.e = chunkId => Promise.all(Object.keys(__webpack_require__.f).reduce(((promises, key) => {
-            __webpack_require__.f[key](chunkId, promises);
-            return promises;
-        }), []));
-    })();
-    (() => {
-        __webpack_require__.u = chunkId => chunkId + ".app.js";
-    })();
-    (() => {
-        __webpack_require__.miniCssF = chunkId => "../css/" + chunkId + ".style.css";
-    })();
-    (() => {
-        __webpack_require__.g = function() {
-            if (typeof globalThis === "object") return globalThis;
-            try {
-                return this || new Function("return this")();
-            } catch (e) {
-                if (typeof window === "object") return window;
-            }
-        }();
-    })();
-    (() => {
-        __webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop);
-    })();
-    (() => {
-        var inProgress = {};
-        var dataWebpackPrefix = "dxpay:";
-        __webpack_require__.l = (url, done, key, chunkId) => {
-            if (inProgress[url]) {
-                inProgress[url].push(done);
-                return;
-            }
-            var script, needAttach;
-            if (key !== void 0) {
-                var scripts = document.getElementsByTagName("script");
-                for (var i = 0; i < scripts.length; i++) {
-                    var s = scripts[i];
-                    if (s.getAttribute("src") == url || s.getAttribute("data-webpack") == dataWebpackPrefix + key) {
-                        script = s;
-                        break;
-                    }
-                }
-            }
-            if (!script) {
-                needAttach = true;
-                script = document.createElement("script");
-                script.charset = "utf-8";
-                script.timeout = 120;
-                if (__webpack_require__.nc) script.setAttribute("nonce", __webpack_require__.nc);
-                script.setAttribute("data-webpack", dataWebpackPrefix + key);
-                script.src = url;
-            }
-            inProgress[url] = [ done ];
-            var onScriptComplete = (prev, event) => {
-                script.onerror = script.onload = null;
-                clearTimeout(timeout);
-                var doneFns = inProgress[url];
-                delete inProgress[url];
-                script.parentNode && script.parentNode.removeChild(script);
-                doneFns && doneFns.forEach((fn => fn(event)));
-                if (prev) return prev(event);
-            };
-            var timeout = setTimeout(onScriptComplete.bind(null, void 0, {
-                type: "timeout",
-                target: script
-            }), 12e4);
-            script.onerror = onScriptComplete.bind(null, script.onerror);
-            script.onload = onScriptComplete.bind(null, script.onload);
-            needAttach && document.head.appendChild(script);
-        };
-    })();
-    (() => {
-        __webpack_require__.r = exports => {
-            if (typeof Symbol !== "undefined" && Symbol.toStringTag) Object.defineProperty(exports, Symbol.toStringTag, {
-                value: "Module"
-            });
-            Object.defineProperty(exports, "__esModule", {
-                value: true
-            });
-        };
-    })();
-    (() => {
-        __webpack_require__.p = "/";
-    })();
-    (() => {
-        var createStylesheet = (chunkId, fullhref, resolve, reject) => {
-            var linkTag = document.createElement("link");
-            linkTag.rel = "stylesheet";
-            linkTag.type = "text/css";
-            var onLinkComplete = event => {
-                linkTag.onerror = linkTag.onload = null;
-                if (event.type === "load") resolve(); else {
-                    var errorType = event && (event.type === "load" ? "missing" : event.type);
-                    var realHref = event && event.target && event.target.href || fullhref;
-                    var err = new Error("Loading CSS chunk " + chunkId + " failed.\n(" + realHref + ")");
-                    err.code = "CSS_CHUNK_LOAD_FAILED";
-                    err.type = errorType;
-                    err.request = realHref;
-                    linkTag.parentNode.removeChild(linkTag);
-                    reject(err);
-                }
-            };
-            linkTag.onerror = linkTag.onload = onLinkComplete;
-            linkTag.href = fullhref;
-            document.head.appendChild(linkTag);
-            return linkTag;
-        };
-        var findStylesheet = (href, fullhref) => {
-            var existingLinkTags = document.getElementsByTagName("link");
-            for (var i = 0; i < existingLinkTags.length; i++) {
-                var tag = existingLinkTags[i];
-                var dataHref = tag.getAttribute("data-href") || tag.getAttribute("href");
-                if (tag.rel === "stylesheet" && (dataHref === href || dataHref === fullhref)) return tag;
-            }
-            var existingStyleTags = document.getElementsByTagName("style");
-            for (i = 0; i < existingStyleTags.length; i++) {
-                tag = existingStyleTags[i];
-                dataHref = tag.getAttribute("data-href");
-                if (dataHref === href || dataHref === fullhref) return tag;
-            }
-        };
-        var loadStylesheet = chunkId => new Promise(((resolve, reject) => {
-            var href = __webpack_require__.miniCssF(chunkId);
-            var fullhref = __webpack_require__.p + href;
-            if (findStylesheet(href, fullhref)) return resolve();
-            createStylesheet(chunkId, fullhref, resolve, reject);
-        }));
-        var installedCssChunks = {
-            179: 0
-        };
-        __webpack_require__.f.miniCss = (chunkId, promises) => {
-            var cssChunks = {
-                752: 1
-            };
-            if (installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]); else if (installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) promises.push(installedCssChunks[chunkId] = loadStylesheet(chunkId).then((() => {
-                installedCssChunks[chunkId] = 0;
-            }), (e => {
-                delete installedCssChunks[chunkId];
-                throw e;
-            })));
-        };
-    })();
-    (() => {
-        var installedChunks = {
-            179: 0
-        };
-        __webpack_require__.f.j = (chunkId, promises) => {
-            var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : void 0;
-            if (installedChunkData !== 0) if (installedChunkData) promises.push(installedChunkData[2]); else if (true) {
-                var promise = new Promise(((resolve, reject) => installedChunkData = installedChunks[chunkId] = [ resolve, reject ]));
-                promises.push(installedChunkData[2] = promise);
-                var url = __webpack_require__.p + __webpack_require__.u(chunkId);
-                var error = new Error;
-                var loadingEnded = event => {
-                    if (__webpack_require__.o(installedChunks, chunkId)) {
-                        installedChunkData = installedChunks[chunkId];
-                        if (installedChunkData !== 0) installedChunks[chunkId] = void 0;
-                        if (installedChunkData) {
-                            var errorType = event && (event.type === "load" ? "missing" : event.type);
-                            var realSrc = event && event.target && event.target.src;
-                            error.message = "Loading chunk " + chunkId + " failed.\n(" + errorType + ": " + realSrc + ")";
-                            error.name = "ChunkLoadError";
-                            error.type = errorType;
-                            error.request = realSrc;
-                            installedChunkData[1](error);
-                        }
-                    }
-                };
-                __webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
-            }
-        };
-        var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-            var [chunkIds, moreModules, runtime] = data;
-            var moduleId, chunkId, i = 0;
-            if (chunkIds.some((id => installedChunks[id] !== 0))) {
-                for (moduleId in moreModules) if (__webpack_require__.o(moreModules, moduleId)) __webpack_require__.m[moduleId] = moreModules[moduleId];
-                if (runtime) runtime(__webpack_require__);
-            }
-            if (parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-            for (;i < chunkIds.length; i++) {
-                chunkId = chunkIds[i];
-                if (__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) installedChunks[chunkId][0]();
-                installedChunks[chunkId] = 0;
-            }
-        };
-        var chunkLoadingGlobal = self["webpackChunkdxpay"] = self["webpackChunkdxpay"] || [];
-        chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-        chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-    })();
     (() => {
         "use strict";
         function isWebp() {
@@ -5909,35 +5709,356 @@
             }
         };
         ScrollTrigger_getGSAP() && ScrollTrigger_gsap.registerPlugin(ScrollTrigger_ScrollTrigger);
-        gsapWithCSS.registerPlugin(ScrollTrigger_ScrollTrigger);
-        if (document.querySelector("[data-scroll-container]")) (async () => {
-            await __webpack_require__.e(752).then(__webpack_require__.bind(__webpack_require__, 752));
-            let LocomotiveScrollModule = await __webpack_require__.e(267).then(__webpack_require__.bind(__webpack_require__, 267));
-            let LocomotiveScroll = LocomotiveScrollModule.default;
-            const smoothScrolling = new LocomotiveScroll({
-                el: document.querySelector("[data-scroll-container]"),
-                smooth: true
-            });
-            smoothScrolling.on("scroll", ScrollTrigger_ScrollTrigger.update);
-            ScrollTrigger_ScrollTrigger.scrollerProxy("[data-scroll-container]", {
-                scrollTop(value) {
-                    return arguments.length ? smoothScrolling.scrollTo(value, 0, 0) : smoothScrolling.scroll.instance.scroll.y;
-                },
-                getBoundingClientRect() {
-                    return {
-                        top: 0,
-                        left: 0,
-                        width: window.innerWidth,
-                        height: window.innerHeight
+        function t() {
+            return t = Object.assign ? Object.assign.bind() : function(t) {
+                for (var i = 1; i < arguments.length; i++) {
+                    var e = arguments[i];
+                    for (var s in e) Object.prototype.hasOwnProperty.call(e, s) && (t[s] = e[s]);
+                }
+                return t;
+            }, t.apply(this, arguments);
+        }
+        function i(t, i, e) {
+            return Math.max(t, Math.min(i, e));
+        }
+        class e {
+            advance(t) {
+                var e;
+                if (!this.isRunning) return;
+                let s = !1;
+                if (this.lerp) this.value = (o = this.value, n = this.to, (1 - (r = 1 - Math.exp(-60 * this.lerp * t))) * o + r * n), 
+                Math.round(this.value) === this.to && (this.value = this.to, s = !0); else {
+                    this.currentTime += t;
+                    const e = i(0, this.currentTime / this.duration, 1);
+                    s = e >= 1;
+                    const o = s ? 1 : this.easing(e);
+                    this.value = this.from + (this.to - this.from) * o;
+                }
+                var o, n, r;
+                null == (e = this.onUpdate) || e.call(this, this.value, s), s && this.stop();
+            }
+            stop() {
+                this.isRunning = !1;
+            }
+            fromTo(t, i, {lerp: e = .1, duration: s = 1, easing: o = (t => t), onStart: n, onUpdate: r}) {
+                this.from = this.value = t, this.to = i, this.lerp = e, this.duration = s, this.easing = o, 
+                this.currentTime = 0, this.isRunning = !0, null == n || n(), this.onUpdate = r;
+            }
+        }
+        class s {
+            constructor({wrapper: t, content: i, autoResize: e = !0} = {}) {
+                if (this.resize = () => {
+                    this.onWrapperResize(), this.onContentResize();
+                }, this.onWrapperResize = () => {
+                    this.wrapper === window ? (this.width = window.innerWidth, this.height = window.innerHeight) : (this.width = this.wrapper.clientWidth, 
+                    this.height = this.wrapper.clientHeight);
+                }, this.onContentResize = () => {
+                    this.scrollHeight = this.content.scrollHeight, this.scrollWidth = this.content.scrollWidth;
+                }, this.wrapper = t, this.content = i, e) {
+                    const t = function(t, i) {
+                        let e;
+                        return function() {
+                            let i = arguments, s = this;
+                            clearTimeout(e), e = setTimeout((function() {
+                                t.apply(s, i);
+                            }), 250);
+                        };
+                    }(this.resize);
+                    this.wrapper !== window && (this.wrapperResizeObserver = new ResizeObserver(t), 
+                    this.wrapperResizeObserver.observe(this.wrapper)), this.contentResizeObserver = new ResizeObserver(t), 
+                    this.contentResizeObserver.observe(this.content);
+                }
+                this.resize();
+            }
+            destroy() {
+                var t, i;
+                null == (t = this.wrapperResizeObserver) || t.disconnect(), null == (i = this.contentResizeObserver) || i.disconnect();
+            }
+            get limit() {
+                return {
+                    x: this.scrollWidth - this.width,
+                    y: this.scrollHeight - this.height
+                };
+            }
+        }
+        class o {
+            constructor() {
+                this.events = {};
+            }
+            emit(t, ...i) {
+                let e = this.events[t] || [];
+                for (let t = 0, s = e.length; t < s; t++) e[t](...i);
+            }
+            on(t, i) {
+                var e;
+                return (null == (e = this.events[t]) ? void 0 : e.push(i)) || (this.events[t] = [ i ]), 
+                () => {
+                    var e;
+                    this.events[t] = null == (e = this.events[t]) ? void 0 : e.filter((t => i !== t));
+                };
+            }
+            off(t, i) {
+                var e;
+                this.events[t] = null == (e = this.events[t]) ? void 0 : e.filter((t => i !== t));
+            }
+            destroy() {
+                this.events = {};
+            }
+        }
+        class n {
+            constructor(t, {wheelMultiplier: e = 1, touchMultiplier: s = 2, normalizeWheel: n = !1}) {
+                this.onTouchStart = t => {
+                    const {clientX: i, clientY: e} = t.targetTouches ? t.targetTouches[0] : t;
+                    this.touchStart.x = i, this.touchStart.y = e, this.lastDelta = {
+                        x: 0,
+                        y: 0
                     };
-                },
-                pinType: document.querySelector("[data-scroll-container]").style.transform ? "transform" : "fixed"
-            });
-            init();
-            ScrollTrigger_ScrollTrigger.addEventListener("refresh", (() => smoothScrolling.update()));
-            ScrollTrigger_ScrollTrigger.refresh();
-        })(); else init();
-        function init() {}
+                }, this.onTouchMove = t => {
+                    const {clientX: i, clientY: e} = t.targetTouches ? t.targetTouches[0] : t, s = -(i - this.touchStart.x) * this.touchMultiplier, o = -(e - this.touchStart.y) * this.touchMultiplier;
+                    this.touchStart.x = i, this.touchStart.y = e, this.lastDelta = {
+                        x: s,
+                        y: o
+                    }, this.emitter.emit("scroll", {
+                        deltaX: s,
+                        deltaY: o,
+                        event: t
+                    });
+                }, this.onTouchEnd = t => {
+                    this.emitter.emit("scroll", {
+                        deltaX: this.lastDelta.x,
+                        deltaY: this.lastDelta.y,
+                        event: t
+                    });
+                }, this.onWheel = t => {
+                    let {deltaX: e, deltaY: s} = t;
+                    this.normalizeWheel && (e = i(-100, e, 100), s = i(-100, s, 100)), e *= this.wheelMultiplier, 
+                    s *= this.wheelMultiplier, this.emitter.emit("scroll", {
+                        deltaX: e,
+                        deltaY: s,
+                        event: t
+                    });
+                }, this.element = t, this.wheelMultiplier = e, this.touchMultiplier = s, this.normalizeWheel = n, 
+                this.touchStart = {
+                    x: null,
+                    y: null
+                }, this.emitter = new o, this.element.addEventListener("wheel", this.onWheel, {
+                    passive: !1
+                }), this.element.addEventListener("touchstart", this.onTouchStart, {
+                    passive: !1
+                }), this.element.addEventListener("touchmove", this.onTouchMove, {
+                    passive: !1
+                }), this.element.addEventListener("touchend", this.onTouchEnd, {
+                    passive: !1
+                });
+            }
+            on(t, i) {
+                return this.emitter.on(t, i);
+            }
+            destroy() {
+                this.emitter.destroy(), this.element.removeEventListener("wheel", this.onWheel, {
+                    passive: !1
+                }), this.element.removeEventListener("touchstart", this.onTouchStart, {
+                    passive: !1
+                }), this.element.removeEventListener("touchmove", this.onTouchMove, {
+                    passive: !1
+                }), this.element.removeEventListener("touchend", this.onTouchEnd, {
+                    passive: !1
+                });
+            }
+        }
+        class r {
+            constructor({wrapper: i = window, content: r = document.documentElement, wheelEventsTarget: l = i, smoothWheel: h = !0, smoothTouch: a = !1, syncTouch: c = !1, syncTouchLerp: u = .1, __iosNoInertiaSyncTouchLerp: p = .4, touchInertiaMultiplier: d = 35, duration: m, easing: v = (t => Math.min(1, 1.001 - Math.pow(2, -10 * t))), lerp: g = m && .1, infinite: S = !1, orientation: w = "vertical", gestureOrientation: f = "vertical", touchMultiplier: y = 1, wheelMultiplier: T = 1, normalizeWheel: z = !1, autoResize: M = !0} = {}) {
+                this.onVirtualScroll = ({deltaX: i, deltaY: e, event: s}) => {
+                    if (s.ctrlKey) return;
+                    const o = s.type.includes("touch"), n = s.type.includes("wheel");
+                    if ("both" === this.options.gestureOrientation && 0 === i && 0 === e || "vertical" === this.options.gestureOrientation && 0 === e || "horizontal" === this.options.gestureOrientation && 0 === i || o && "vertical" === this.options.gestureOrientation && 0 === this.scroll && !this.options.infinite && e <= 0) return;
+                    let r = s.composedPath();
+                    if (r = r.slice(0, r.indexOf(this.rootElement)), r.find((t => {
+                        var i;
+                        return (null == t.hasAttribute ? void 0 : t.hasAttribute("data-lenis-prevent")) || o && (null == t.hasAttribute ? void 0 : t.hasAttribute("data-lenis-prevent-touch")) || n && (null == t.hasAttribute ? void 0 : t.hasAttribute("data-lenis-prevent-wheel")) || (null == (i = t.classList) ? void 0 : i.contains("lenis"));
+                    }))) return;
+                    if (this.isStopped || this.isLocked) return void s.preventDefault();
+                    if (this.isSmooth = (this.options.smoothTouch || this.options.syncTouch) && o || this.options.smoothWheel && n, 
+                    !this.isSmooth) return this.isScrolling = !1, void this.animate.stop();
+                    s.preventDefault();
+                    let l = e;
+                    "both" === this.options.gestureOrientation ? l = Math.abs(e) > Math.abs(i) ? e : i : "horizontal" === this.options.gestureOrientation && (l = i);
+                    const h = o && this.options.syncTouch, a = o && "touchend" === s.type && Math.abs(l) > 1;
+                    a && (l = this.velocity * this.options.touchInertiaMultiplier), this.scrollTo(this.targetScroll + l, t({
+                        programmatic: !1
+                    }, h && {
+                        lerp: a ? this.syncTouchLerp : this.options.__iosNoInertiaSyncTouchLerp
+                    }));
+                }, this.onScroll = () => {
+                    if (!this.isScrolling) {
+                        const t = this.animatedScroll;
+                        this.animatedScroll = this.targetScroll = this.actualScroll, this.velocity = 0, 
+                        this.direction = Math.sign(this.animatedScroll - t), this.emit();
+                    }
+                }, window.lenisVersion = "1.0.25", i !== document.documentElement && i !== document.body || (i = window), 
+                this.options = {
+                    wrapper: i,
+                    content: r,
+                    wheelEventsTarget: l,
+                    smoothWheel: h,
+                    smoothTouch: a,
+                    syncTouch: c,
+                    syncTouchLerp: u,
+                    __iosNoInertiaSyncTouchLerp: p,
+                    touchInertiaMultiplier: d,
+                    duration: m,
+                    easing: v,
+                    lerp: g,
+                    infinite: S,
+                    gestureOrientation: f,
+                    orientation: w,
+                    touchMultiplier: y,
+                    wheelMultiplier: T,
+                    normalizeWheel: z,
+                    autoResize: M
+                }, this.animate = new e, this.emitter = new o, this.dimensions = new s({
+                    wrapper: i,
+                    content: r,
+                    autoResize: M
+                }), this.toggleClass("lenis", !0), this.velocity = 0, this.isStopped = !1, this.isSmooth = h || a, 
+                this.isScrolling = !1, this.targetScroll = this.animatedScroll = this.actualScroll, 
+                this.options.wrapper.addEventListener("scroll", this.onScroll, {
+                    passive: !1
+                }), this.virtualScroll = new n(l, {
+                    touchMultiplier: y,
+                    wheelMultiplier: T,
+                    normalizeWheel: z
+                }), this.virtualScroll.on("scroll", this.onVirtualScroll);
+            }
+            destroy() {
+                this.emitter.destroy(), this.options.wrapper.removeEventListener("scroll", this.onScroll, {
+                    passive: !1
+                }), this.virtualScroll.destroy(), this.dimensions.destroy(), this.toggleClass("lenis", !1), 
+                this.toggleClass("lenis-smooth", !1), this.toggleClass("lenis-scrolling", !1), this.toggleClass("lenis-stopped", !1);
+            }
+            on(t, i) {
+                return this.emitter.on(t, i);
+            }
+            off(t, i) {
+                return this.emitter.off(t, i);
+            }
+            setScroll(t) {
+                this.isHorizontal ? this.rootElement.scrollLeft = t : this.rootElement.scrollTop = t;
+            }
+            resize() {
+                this.dimensions.resize();
+            }
+            emit() {
+                this.emitter.emit("scroll", this);
+            }
+            reset() {
+                this.isLocked = !1, this.isScrolling = !1, this.velocity = 0, this.animate.stop();
+            }
+            start() {
+                this.isStopped = !1, this.reset();
+            }
+            stop() {
+                this.isStopped = !0, this.animate.stop(), this.reset();
+            }
+            raf(t) {
+                const i = t - (this.time || t);
+                this.time = t, this.animate.advance(.001 * i);
+            }
+            scrollTo(t, {offset: e = 0, immediate: s = !1, lock: o = !1, duration: n = this.options.duration, easing: r = this.options.easing, lerp: l = !n && this.options.lerp, onComplete: h = null, force: a = !1, programmatic: c = !0} = {}) {
+                if (!this.isStopped || a) {
+                    if ([ "top", "left", "start" ].includes(t)) t = 0; else if ([ "bottom", "right", "end" ].includes(t)) t = this.limit; else {
+                        var u;
+                        let i;
+                        if ("string" == typeof t ? i = document.querySelector(t) : null != (u = t) && u.nodeType && (i = t), 
+                        i) {
+                            if (this.options.wrapper !== window) {
+                                const t = this.options.wrapper.getBoundingClientRect();
+                                e -= this.isHorizontal ? t.left : t.top;
+                            }
+                            const s = i.getBoundingClientRect();
+                            t = (this.isHorizontal ? s.left : s.top) + this.animatedScroll;
+                        }
+                    }
+                    if ("number" == typeof t) {
+                        if (t += e, t = Math.round(t), this.options.infinite ? c && (this.targetScroll = this.animatedScroll = this.scroll) : t = i(0, t, this.limit), 
+                        s) return this.animatedScroll = this.targetScroll = t, this.setScroll(this.scroll), 
+                        this.reset(), this.emit(), void (null == h || h(this));
+                        if (!c) {
+                            if (t === this.targetScroll) return;
+                            this.targetScroll = t;
+                        }
+                        this.animate.fromTo(this.animatedScroll, t, {
+                            duration: n,
+                            easing: r,
+                            lerp: l,
+                            onStart: () => {
+                                o && (this.isLocked = !0), this.isScrolling = !0;
+                            },
+                            onUpdate: (t, i) => {
+                                this.isScrolling = !0, this.velocity = t - this.animatedScroll, this.direction = Math.sign(this.velocity), 
+                                this.animatedScroll = t, this.setScroll(this.scroll), c && (this.targetScroll = t), 
+                                i || this.emit(), i && requestAnimationFrame((() => {
+                                    this.isScrolling = !1, this.velocity = 0, o && (this.isLocked = !1), this.emit(), 
+                                    null == h || h(this);
+                                }));
+                            }
+                        });
+                    }
+                }
+            }
+            get rootElement() {
+                return this.options.wrapper === window ? this.options.content : this.options.wrapper;
+            }
+            get limit() {
+                return this.dimensions.limit[this.isHorizontal ? "x" : "y"];
+            }
+            get isHorizontal() {
+                return "horizontal" === this.options.orientation;
+            }
+            get actualScroll() {
+                return this.isHorizontal ? this.rootElement.scrollLeft : this.rootElement.scrollTop;
+            }
+            get scroll() {
+                return this.options.infinite ? (this.animatedScroll % (t = this.limit) + t) % t : this.animatedScroll;
+                var t;
+            }
+            get progress() {
+                return 0 === this.limit ? 1 : this.scroll / this.limit;
+            }
+            get isSmooth() {
+                return this.__isSmooth;
+            }
+            set isSmooth(t) {
+                this.__isSmooth !== t && (this.__isSmooth = t, this.toggleClass("lenis-smooth", t));
+            }
+            get isScrolling() {
+                return this.__isScrolling;
+            }
+            set isScrolling(t) {
+                this.__isScrolling !== t && (this.__isScrolling = t, this.toggleClass("lenis-scrolling", t));
+            }
+            get isStopped() {
+                return this.__isStopped;
+            }
+            set isStopped(t) {
+                this.__isStopped !== t && (this.__isStopped = t, this.toggleClass("lenis-stopped", t));
+            }
+            get className() {
+                let t = "lenis";
+                return this.isStopped && (t += " lenis-stopped"), this.isScrolling && (t += " lenis-scrolling"), 
+                this.isSmooth && (t += " lenis-smooth"), t;
+            }
+            toggleClass(t, i) {
+                this.rootElement.classList.toggle(t, i), this.emitter.emit("className change", this);
+            }
+        }
+        gsapWithCSS.registerPlugin(ScrollTrigger_ScrollTrigger);
+        const lenis = new r;
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
         class DynamicAdapt {
             constructor(type) {
                 this.type = type;
