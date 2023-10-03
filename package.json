@@ -19,6 +19,7 @@
 		"bem": "fls-bemtree-from-html"
 	},
 	"devDependencies": {
+		"@studio-freight/lenis": "^1.0.25",
 		"@types/isotope-layout": "^3.0.9",
 		"accordion-js": "^3.3.4",
 		"animejs": "^3.2.1",
@@ -59,7 +60,6 @@
 		"js-datepicker": "latest",
 		"lightgallery": "latest",
 		"load-plugins": "latest",
-		"locomotive-scroll": "^4.1.4",
 		"magicmouse.js": "^2.0.0",
 		"mini-css-extract-plugin": "2.4.7",
 		"mixitup": "^3.3.1",
