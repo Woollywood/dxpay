@@ -33,7 +33,6 @@ class AnimationHandler {
 	_layoutObserverCallback(event) {
 		for (const { addedNodes } of event) {
 			for (const node of addedNodes) {
-				console.log(this._stack);
 				if (node.tagName === 'svg') node.dataset.animationId = this._animationObserverIndex++;
 			}
 		}
@@ -54,8 +53,6 @@ class AnimationHandler {
 			});
 
 			animation.addEventListener('complete', (e) => {
-				console.log('complete');
-
 				if (this._stack.length) {
 					this._animationPlay(this._stack.shift());
 				}
@@ -81,6 +78,8 @@ class AnimationHandler {
 		let animationObject = null;
 		if (!this._animationCache.has(this._meta[animationIndex].src)) {
 			this._loadAnimation(this._meta[animationIndex].src).then((animation) => {
+				console.log(this._meta[animationIndex].src);
+
 				animationObject = animation;
 				this._svgStylesReset(animationIndex);
 				this._animationCache.set(this._meta[animationIndex].src, animation);
@@ -109,7 +108,7 @@ class AnimationHandler {
 		}
 	}
 
-	
+
 	prevAnimation() {
 		const animationObject = this._animationCache.get(this._meta[this._currentAnimationIndex].src);
 		animationObject.setDirection(-1);
@@ -174,7 +173,7 @@ async function initLottie() {
 				start: 'top top',
 				// markers: true,
 				onEnter: (triggerEvent) => {
-					console.log(`scroll into section ${section.id}`);
+					console.log(`scroll into ${section.id}`);
 					animationHandler.nextAnimation();
 				},
 				onLeaveBack: (triggerEvent) => {
