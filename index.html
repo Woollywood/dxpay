@@ -6,7 +6,7 @@
 	<meta charset="UTF-8" />
 	<meta name="format-detection" content="telephone=no" />
 	<!-- <style>body{opacity: 0;}</style> -->
-	<link rel="stylesheet" href="css/style.min.css?_v=20231003185628" />
+	<link rel="stylesheet" href="css/style.min.css?_v=20231004215002" />
 	<link rel="shortcut icon" href="favicon.ico" />
 	<!-- <meta name="robots" content="noindex, nofollow"> -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -43,8 +43,8 @@
 
 		<main class="page">
 			<div class="page__grid">
-				<div class="section-container">
-					<section class="section">
+				<div class="section-container" id="animation-sections">
+					<section class="section" data-section="test caption">
 						<div class="section__image-layout">
 							<div class="section__image-ibg">
 								<picture><source srcset="img/section/01.webp" type="image/webp"><img src="img/section/01.png" alt="image" /></picture>
@@ -105,7 +105,7 @@
 						</div>
 					</section>
 				</div>
-				<div class="animation-layout"></div>
+				<div class="animation-layout" id="animation-layout"></div>
 			</div>
 		</main>
 		<footer class="footer">
@@ -136,7 +136,8 @@
 		</footer>
 
 	</div>
-	<script src="js/app.min.js?_v=20231003185628"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js?_v=20231004215002"></script>
+	<script src="js/app.min.js?_v=20231004215002"></script>
 
 </body>
 

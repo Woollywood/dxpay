@@ -565,9 +565,33 @@ h6 {
 }
 
 .animation-layout {
+  position: relative;
+  width: 100%;
   background: -webkit-gradient(linear, left top, left bottom, from(#fff2d9), to(#f5d6b8));
   background: -o-linear-gradient(#fff2d9 0%, #f5d6b8 100%);
   background: linear-gradient(#fff2d9 0%, #f5d6b8 100%);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.animation-layout svg {
+  display: none;
+  max-width: 100%;
+  position: fixed;
+  top: 0;
+  width: 100% !important;
+  height: 100vh !important;
+  -webkit-transform: translateX(-20%) !important;
+      -ms-transform: translateX(-20%) !important;
+          transform: translateX(-20%) !important;
+}
+
+.animation-playing {
+  display: block !important;
 }
 
 .section {
