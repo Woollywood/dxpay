@@ -74,7 +74,7 @@ class AnimationHandler {
 	/**
 	 * Воспроизведение анимации по индексу
 	 */
-	_animationPlay(animationIndex) {
+	_animationPlay({ direction, animationIndex }) {
 		let animationObject = null;
 		if (!this._animationCache.has(this._meta[animationIndex].src)) {
 			this._loadAnimation(this._meta[animationIndex].src).then((animation) => {
@@ -83,13 +83,13 @@ class AnimationHandler {
 				animationObject = animation;
 				this._svgStylesReset(animationIndex);
 				this._animationCache.set(this._meta[animationIndex].src, animation);
-				animationObject.setDirection(1);
+				animationObject.setDirection(direction);
 				animationObject.play();
 			});
 		} else {
 			animationObject = this._animationCache.get(this._meta[animationIndex].src);
 			this._svgStylesReset(animationIndex);
-			animationObject.setDirection(1);
+			animationObject.setDirection(direction);
 			animationObject.play();
 		}
 	}
@@ -101,19 +101,43 @@ class AnimationHandler {
 		this._currentAnimationIndex++;
 
 		if (!this._stack.length) {
-			this._animationPlay(this._currentAnimationIndex);
-			this._stack.push(this._currentAnimationIndex);
+			this._animationPlay({
+				direction: 1,
+				animationIndex: this._currentAnimationIndex,
+			});
+			this._stack.push({
+				direction: 1,
+				animationIndex: this._currentAnimationIndex,
+			});
 		} else {
-			this._stack.push(this._currentAnimationIndex);
+			this._stack.push({
+				direction: 1,
+				animationIndex: this._currentAnimationIndex,
+			});
 		}
 	}
 
-
 	prevAnimation() {
-		const animationObject = this._animationCache.get(this._meta[this._currentAnimationIndex].src);
-		animationObject.setDirection(-1);
-		animationObject.play();
-		this._svgStylesReset();
+		// const animationObject = this._animationCache.get(this._meta[this._currentAnimationIndex].src);
+		// animationObject.setDirection(-1);
+		// animationObject.play();
+		// this._svgStylesReset();
+
+		if (!this._stack.length) {
+			this._animationPlay({
+				direction: -1,
+				animationIndex: this._currentAnimationIndex,
+			});
+			this._stack.push({
+				direction: -1,
+				animationIndex: this._currentAnimationIndex,
+			});
+		} else {
+			this._stack.push({
+				direction: -1,
+				animationIndex: this._currentAnimationIndex,
+			});
+		}
 
 		this._currentAnimationIndex--;
 	}
