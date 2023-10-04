@@ -26,13 +26,18 @@
 	}
 
 	svg {
+		display: none;
 		max-width: 100%;
-		position: sticky;
+		position: fixed;
 		top: 0;
 		width: 100% !important;
 		height: 100vh !important;
-		transform: scale(1.4) translateX(-20%) !important;
+		transform: translateX(-20%) !important;
 	}
+}
+
+.animation-playing {
+	display: block !important;
 }
 
 .section {
