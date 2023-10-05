@@ -23,6 +23,59 @@ function raf(time) {
 
 requestAnimationFrame(raf);
 
+document.addEventListener('DOMContentLoaded', () => {
+	if (document.querySelector('#animation-layout')) initLottie();
+});
+
+class AnimationHandlerMobile {
+	constructor(meta) {
+		this._meta = meta;
+		this._animationList = new Map();
+	}
+
+	_buildAnimation() {
+		const animationSectionList = document.querySelectorAll('.section__animation-layout');
+		animationSectionList.forEach(async (animationSection, index) => {
+			await this._load(index, animationSection);
+		});
+	}
+
+	async _load(animationIndex, container) {
+		this._animationList.set(
+			this._meta[animationIndex].src,
+			await this._loadAnimation(this._meta[animationIndex].src, container)
+		);
+	}
+
+	_loadAnimation(path, container) {
+		return new Promise((resolve, reject) => {
+			const animation = bodymovin.loadAnimation({
+				container,
+				renderer: 'svg',
+				loop: false,
+				autoplay: false,
+				path,
+			});
+
+			animation.addEventListener('DOMLoaded', () => {
+				resolve(animation);
+			});
+
+			animation.addEventListener('error', (error) => {
+				reject(error);
+			});
+		});
+	}
+
+	async build() {
+		this._buildAnimation();
+	}
+
+	play(animationIndex) {
+		this._animationList.get(this._meta[animationIndex].src).play();
+	}
+}
+
 function loadAnimation(path, container) {
 	return new Promise((resolve, reject) => {
 		const animation = bodymovin.loadAnimation({
@@ -33,9 +86,9 @@ function loadAnimation(path, container) {
 			path,
 		});
 
-		animation.addEventListener('enterFrame', e => {
+		animation.addEventListener('enterFrame', (e) => {
 			console.log(e);
-		})
+		});
 
 		animation.addEventListener('DOMLoaded', () => {
 			console.log('loaded');
@@ -51,11 +104,11 @@ function loadAnimation(path, container) {
 const PATH = '../../files/lottie/data.json';
 
 async function initLottie() {
-	// const sections = document.querySelectorAll('.section');
-	// sections.forEach((section, index) => {
-	// 	section.id = `section-${index}`;
-	// 	section.querySelector('.section__animation-layout').id = `animation-mobile-${index}`;
-	// });
+	const sections = document.querySelectorAll('.section');
+	sections.forEach((section, index) => {
+		section.id = `section-${index}`;
+		section.querySelector('.section__animation-layout').id = `animation-mobile-${index}`;
+	});
 
 	let animationLayout = document.querySelector('#animation-layout');
 	let animationWrapper = document.querySelector('#animation-wrapper');
@@ -79,22 +132,57 @@ async function initLottie() {
 			},
 		});
 	} else {
-		// const animationHandler = new AnimationHandlerMobile(returnAnimationFiles());
-		// await animationHandler.build();
-		// sections.forEach((section, index) => {
-		// 	ScrollTrigger.create({
-		// 		trigger: section,
-		// 		start: '-40% top',
-		// 		onEnter: (triggerEvent) => {
-		// 			console.log('enter');
-		// 			animationHandler.play(index);
-		// 		},
-		// 		onLeaveBack: (triggerEvent) => {},
-		// 	});
-		// });
+		const animationHandler = new AnimationHandlerMobile(returnAnimationFiles());
+		await animationHandler.build();
+		sections.forEach((section, index) => {
+			ScrollTrigger.create({
+				trigger: section,
+				start: '-40% top',
+				onEnter: (triggerEvent) => {
+					console.log('enter');
+					animationHandler.play(index);
+				},
+				onLeaveBack: (triggerEvent) => {},
+			});
+		});
 	}
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-	if (document.querySelector('#animation-layout')) initLottie();
-});
+function returnAnimationFiles() {
+	return [
+		{
+			src: './files/lottie/data-01.json',
+		},
+		{
+			src: './files/lottie/data-02.json',
+			offset: 76,
+		},
+		{
+			src: './files/lottie/data-03.json',
+		},
+		{
+			src: './files/lottie/data-04.json',
+		},
+		{
+			src: './files/lottie/data-05.json',
+		},
+		{
+			src: './files/lottie/data-06.json',
+		},
+		{
+			src: './files/lottie/data-07.json',
+		},
+		{
+			src: './files/lottie/data-08.json',
+		},
+		{
+			src: './files/lottie/data-09.json',
+		},
+		{
+			src: './files/lottie/data-10.json',
+		},
+		{
+			src: './files/lottie/data-11.json',
+		},
+	];
+}
