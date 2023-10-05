@@ -27,7 +27,6 @@
 	}
 
 	svg {
-		display: none;
 		max-width: 100%;
 		position: fixed;
 		top: 0;
@@ -35,10 +34,6 @@
 		height: 100vh !important;
 		transform: translate(-20%, -10%) !important;
 	}
-}
-
-.animation-playing {
-	display: block !important;
 }
 
 .section {
