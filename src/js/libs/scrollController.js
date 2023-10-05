@@ -59,8 +59,13 @@ class AnimationHandler {
 			});
 
 			animation.addEventListener('DOMLoaded', () => {
+				console.log('loaded');
 				resolve(animation);
 			});
+
+			animation.addEventListener('enterFrame', e => {
+				console.log(e);
+			})
 
 			animation.addEventListener('complete', (e) => {
 				if (this._stack.length) {
