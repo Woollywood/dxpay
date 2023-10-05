@@ -101,7 +101,7 @@ function loadAnimation(path, container) {
 	});
 }
 
-const PATH = '../../files/lottie/data.json';
+const PATH = './files/lottie/data.json';
 
 async function initLottie() {
 	const sections = document.querySelectorAll('.section');
