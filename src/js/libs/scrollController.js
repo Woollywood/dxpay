@@ -33,18 +33,17 @@ class AnimationHandlerMobile {
 		this._animationList = new Map();
 	}
 
-	_buildAnimation() {
+	async _buildAnimation() {
 		const animationSectionList = document.querySelectorAll('.section__animation-layout');
-		animationSectionList.forEach(async (animationSection, index) => {
-			await this._load(index, animationSection);
-		});
+		let index = 0;
+		for await (const animationSection of animationSectionList) {
+			await this._load(index++, animationSection);
+		}
 	}
 
 	async _load(animationIndex, container) {
-		this._animationList.set(
-			this._meta[animationIndex].src,
-			await this._loadAnimation(this._meta[animationIndex].src, container)
-		);
+		let animation = await this._loadAnimation(this._meta[animationIndex].src, container);
+		this._animationList.set(this._meta[animationIndex].src, animation);
 	}
 
 	_loadAnimation(path, container) {
@@ -68,7 +67,7 @@ class AnimationHandlerMobile {
 	}
 
 	async build() {
-		this._buildAnimation();
+		await this._buildAnimation();
 	}
 
 	play(animationIndex) {
@@ -87,7 +86,7 @@ function loadAnimation(path, container) {
 		});
 
 		animation.addEventListener('enterFrame', (e) => {
-			console.log(e);
+			// console.log(e);
 		});
 
 		animation.addEventListener('DOMLoaded', () => {
@@ -134,6 +133,7 @@ async function initLottie() {
 	} else {
 		const animationHandler = new AnimationHandlerMobile(returnAnimationFiles());
 		await animationHandler.build();
+		console.log('build in listener');
 		sections.forEach((section, index) => {
 			ScrollTrigger.create({
 				trigger: section,
