@@ -6069,115 +6069,25 @@
             requestAnimationFrame(raf);
         }
         requestAnimationFrame(raf);
-        class AnimationHandler {
-            constructor(layout, meta) {
-                this._layout = layout;
-                this._meta = meta;
-                this.layoutObserver = new MutationObserver(this._layoutObserverCallback.bind(this));
-                this.layoutObserver.observe(this._layout, {
-                    childList: true
-                });
-                this._currentAnimationIndex = -1;
-                this._animationObserverIndex = 0;
-                this._animationCache = new Map;
-                this._stack = [];
-            }
-            _layoutObserverCallback(event) {
-                for (const {addedNodes} of event) for (const node of addedNodes) if (node.tagName === "svg") node.dataset.animationId = this._animationObserverIndex++;
-            }
-            _loadAnimation(path) {
-                return new Promise(((resolve, reject) => {
-                    const animation = bodymovin.loadAnimation({
-                        container: this._layout,
-                        renderer: "svg",
-                        loop: false,
-                        autoplay: false,
-                        path
-                    });
-                    animation.addEventListener("DOMLoaded", (() => {
-                        console.log("loaded");
-                        resolve(animation);
-                    }));
-                    animation.addEventListener("enterFrame", (e => {
-                        console.log(e);
-                    }));
-                    animation.addEventListener("complete", (e => {
-                        if (this._stack.length) this._animationPlay(this._stack.shift());
-                    }));
-                    animation.addEventListener("error", (error => {
-                        reject(error);
-                    }));
-                }));
-            }
-            _svgStylesReset(animationIndex) {
-                const animationSvgList = this._layout.querySelectorAll("svg");
-                animationSvgList?.forEach((animation => animation.classList.remove("animation-playing")));
-                const animationSvg = this._layout.querySelector(`[data-animation-id="${animationIndex}"]`);
-                animationSvg.classList.add("animation-playing");
-            }
-            _animationPlay({direction, animationIndex}) {
-                let animationObject = null;
-                if (!this._animationCache.has(this._meta[animationIndex].src)) this._loadAnimation(this._meta[animationIndex].src, this._meta[animationIndex].offset).then((animation => {
-                    animationObject = animation;
-                    this._svgStylesReset(animationIndex);
-                    this._animationCache.set(this._meta[animationIndex].src, animation);
-                    animationObject.setDirection(direction);
-                    animationObject.play();
-                })); else {
-                    animationObject = this._animationCache.get(this._meta[animationIndex].src);
-                    this._svgStylesReset(animationIndex);
-                    animationObject.setDirection(direction);
-                    animationObject.play();
-                }
-            }
-            nextAnimation() {
-                this._currentAnimationIndex++;
-                if (!this._stack.length) {
-                    this._animationPlay({
-                        direction: 1,
-                        animationIndex: this._currentAnimationIndex
-                    });
-                    this._stack.push({
-                        direction: 1,
-                        animationIndex: this._currentAnimationIndex
-                    });
-                } else this._stack.push({
-                    direction: 1,
-                    animationIndex: this._currentAnimationIndex
-                });
-            }
-            prevAnimation() {
-                if (!this._stack.length) {
-                    this._animationPlay({
-                        direction: -1,
-                        animationIndex: this._currentAnimationIndex
-                    });
-                    this._stack.push({
-                        direction: -1,
-                        animationIndex: this._currentAnimationIndex
-                    });
-                } else this._stack.push({
-                    direction: -1,
-                    animationIndex: this._currentAnimationIndex
-                });
-                this._currentAnimationIndex--;
-            }
-        }
+        document.addEventListener("DOMContentLoaded", (() => {
+            if (document.querySelector("#animation-layout")) initLottie();
+        }));
         class AnimationHandlerMobile {
             constructor(meta) {
                 this._meta = meta;
                 this._animationList = new Map;
             }
-            _buildAnimation() {
+            async _buildAnimation() {
                 const animationSectionList = document.querySelectorAll(".section__animation-layout");
-                animationSectionList.forEach((async (animationSection, index) => {
-                    await this._load(index, animationSection);
-                }));
+                let index = 0;
+                for await (const animationSection of animationSectionList) await this._load(index++, animationSection);
             }
             async _load(animationIndex, container) {
-                this._animationList.set(this._meta[animationIndex].src, await this._loadAnimation(this._meta[animationIndex].src, container));
+                let animation = await this._loadAnimation(this._meta[animationIndex].src, container, this._meta[animationIndex].startOffset, this._meta[animationIndex].endOffset);
+                animation.goToAndStop(this._meta[animationIndex].startOffset, true);
+                this._animationList.set(this._meta[animationIndex].src, animation);
             }
-            _loadAnimation(path, container) {
+            _loadAnimation(path, container, offset) {
                 return new Promise(((resolve, reject) => {
                     const animation = bodymovin.loadAnimation({
                         container,
@@ -6195,69 +6105,73 @@
                 }));
             }
             async build() {
-                this._buildAnimation();
+                await this._buildAnimation();
             }
             play(animationIndex) {
-                this._animationList.get(this._meta[animationIndex].src).play();
+                this._animationList.get(this._meta[animationIndex].src).playSegments([ this._meta[animationIndex].startOffset, this._meta[animationIndex].endOffset ], true);
             }
         }
-        function returnAnimationFiles() {
-            return [ {
-                src: "./files/lottie/data-01.json"
-            }, {
-                src: "./files/lottie/data-02.json",
-                offset: 76
-            }, {
-                src: "./files/lottie/data-03.json"
-            }, {
-                src: "./files/lottie/data-04.json"
-            }, {
-                src: "./files/lottie/data-05.json"
-            }, {
-                src: "./files/lottie/data-06.json"
-            }, {
-                src: "./files/lottie/data-07.json"
-            }, {
-                src: "./files/lottie/data-08.json"
-            }, {
-                src: "./files/lottie/data-09.json"
-            }, {
-                src: "./files/lottie/data-10.json"
-            }, {
-                src: "./files/lottie/data-11.json"
-            } ];
+        function loadAnimation(path, container) {
+            return new Promise(((resolve, reject) => {
+                const animation = bodymovin.loadAnimation({
+                    container,
+                    renderer: "svg",
+                    loop: false,
+                    autoplay: false,
+                    path
+                });
+                animation.addEventListener("enterFrame", (e => {
+                    console.log(e);
+                }));
+                animation.addEventListener("DOMLoaded", (() => {
+                    console.log("loaded");
+                    resolve(animation);
+                }));
+                animation.addEventListener("error", (error => {
+                    reject(error);
+                }));
+            }));
         }
+        const PATH = "./files/lottie/data.json";
         async function initLottie() {
             const sections = document.querySelectorAll(".section");
             sections.forEach(((section, index) => {
                 section.id = `section-${index}`;
                 section.querySelector(".section__animation-layout").id = `animation-mobile-${index}`;
             }));
+            let animationLayout = document.querySelector("#animation-layout");
+            let animationWrapper = document.querySelector("#animation-wrapper");
             if (window.innerWidth > 767.98) {
-                const animationHandler = new AnimationHandler(document.getElementById("animation-layout"), returnAnimationFiles());
-                animationHandler.nextAnimation();
-                sections.forEach(((section, index) => {
-                    ScrollTrigger_ScrollTrigger.create({
-                        trigger: section,
-                        start: "top top",
-                        onEnter: triggerEvent => {
-                            animationHandler.nextAnimation();
-                        },
-                        onLeaveBack: triggerEvent => {
-                            console.log("leave section");
-                            animationHandler.prevAnimation();
-                        }
-                    });
-                }));
+                if (lenis.targetScroll === 0) {
+                    document.documentElement.classList.add("lock");
+                    lenis.stop();
+                }
+                let animation = null;
+                let animationFrames = null;
+                ScrollTrigger_ScrollTrigger.create({
+                    trigger: animationLayout,
+                    start: "1px top",
+                    end: "bottom bottom",
+                    onEnter: triggerEvent => {
+                        console.log("enter");
+                        loadAnimation(PATH, animationWrapper).then((animationObject => {
+                            animation = animationObject;
+                            animationFrames = animationObject.totalFrames;
+                        }));
+                    },
+                    onUpdate: triggerEvent => {
+                        if (animation) animation.goToAndStop(triggerEvent.progress * animationFrames, true);
+                    }
+                });
             } else {
                 const animationHandler = new AnimationHandlerMobile(returnAnimationFiles());
                 await animationHandler.build();
+                console.log("build in listener");
                 sections.forEach(((section, index) => {
                     ScrollTrigger_ScrollTrigger.create({
                         trigger: section,
                         start: "-40% top",
                         onEnter: triggerEvent => {
-                            console.log("enter");
                             animationHandler.play(index);
                         },
                         onLeaveBack: triggerEvent => {}
@@ -6265,9 +6179,49 @@
                 }));
             }
         }
-        document.addEventListener("DOMContentLoaded", (() => {
-            if (document.querySelector("#animation-sections")) initLottie();
-        }));
+        function returnAnimationFiles() {
+            return [ {
+                src: "./files/lottie/data-01.json",
+                startOffset: 0,
+                endOffset: 74
+            }, {
+                src: "./files/lottie/data-02.json",
+                startOffset: 74,
+                endOffset: 166
+            }, {
+                src: "./files/lottie/data-03.json",
+                startOffset: 166,
+                endOffset: 300
+            }, {
+                src: "./files/lottie/data-04.json",
+                startOffset: 300,
+                endOffset: 400
+            }, {
+                src: "./files/lottie/data-05.json",
+                startOffset: 400,
+                endOffset: 500
+            }, {
+                src: "./files/lottie/data-06.json",
+                startOffset: 500,
+                endOffset: 600
+            }, {
+                src: "./files/lottie/data-07.json",
+                startOffset: 600,
+                endOffset: 660
+            }, {
+                src: "./files/lottie/data-08.json",
+                startOffset: 660,
+                endOffset: 860
+            }, {
+                src: "./files/lottie/data-09.json",
+                startOffset: 860,
+                endOffset: 960
+            }, {
+                src: "./files/lottie/data-10.json",
+                startOffset: 960,
+                endOffset: 1120
+            } ];
+        }
         class DynamicAdapt {
             constructor(type) {
                 this.type = type;

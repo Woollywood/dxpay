@@ -580,7 +580,6 @@ h6 {
 }
 
 .animation-layout svg {
-  display: none;
   max-width: 100%;
   position: fixed;
   top: 0;
@@ -589,10 +588,6 @@ h6 {
   -webkit-transform: translate(-20%, -10%) !important;
       -ms-transform: translate(-20%, -10%) !important;
           transform: translate(-20%, -10%) !important;
-}
-
-.animation-playing {
-  display: block !important;
 }
 
 .section {
