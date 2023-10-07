@@ -259,6 +259,44 @@
                 document.documentElement.classList.add(className);
             }));
         }
+        let bodyLockStatus = true;
+        let bodyLockToggle = (delay = 500) => {
+            if (document.documentElement.classList.contains("lock")) bodyUnlock(delay); else bodyLock(delay);
+        };
+        let bodyUnlock = (delay = 500) => {
+            let body = document.querySelector("body");
+            if (bodyLockStatus) {
+                let lock_padding = document.querySelectorAll("[data-lp]");
+                setTimeout((() => {
+                    for (let index = 0; index < lock_padding.length; index++) {
+                        const el = lock_padding[index];
+                        el.style.paddingRight = "0px";
+                    }
+                    body.style.paddingRight = "0px";
+                    document.documentElement.classList.remove("lock");
+                }), delay);
+                bodyLockStatus = false;
+                setTimeout((function() {
+                    bodyLockStatus = true;
+                }), delay);
+            }
+        };
+        let bodyLock = (delay = 500) => {
+            let body = document.querySelector("body");
+            if (bodyLockStatus) {
+                let lock_padding = document.querySelectorAll("[data-lp]");
+                for (let index = 0; index < lock_padding.length; index++) {
+                    const el = lock_padding[index];
+                    el.style.paddingRight = window.innerWidth - document.querySelector(".wrapper").offsetWidth + "px";
+                }
+                body.style.paddingRight = window.innerWidth - document.querySelector(".wrapper").offsetWidth + "px";
+                document.documentElement.classList.add("lock");
+                bodyLockStatus = false;
+                setTimeout((function() {
+                    bodyLockStatus = true;
+                }), delay);
+            }
+        };
         var accordion_min = __webpack_require__(171);
         const DURATION = 600;
         if (document.querySelector(".accordion-container")) new accordion_min(".accordion-container", {
@@ -6111,6 +6149,9 @@
                 this._animationList.get(this._meta[animationIndex].src).playSegments([ this._meta[animationIndex].startOffset, this._meta[animationIndex].endOffset ], true);
             }
         }
+        const PATH = "./files/lottie/data.json";
+        const START_OFFSET = 74;
+        let isStartAnimated;
         function loadAnimation(path, container) {
             return new Promise(((resolve, reject) => {
                 const animation = bodymovin.loadAnimation({
@@ -6120,11 +6161,13 @@
                     autoplay: false,
                     path
                 });
-                animation.addEventListener("enterFrame", (e => {
-                    console.log(e);
+                animation.addEventListener("complete", (e => {
+                    if (!isStartAnimated) {
+                        bodyLockToggle();
+                        lenis.start();
+                    }
                 }));
                 animation.addEventListener("DOMLoaded", (() => {
-                    console.log("loaded");
                     resolve(animation);
                 }));
                 animation.addEventListener("error", (error => {
@@ -6132,7 +6175,6 @@
                 }));
             }));
         }
-        const PATH = "./files/lottie/data.json";
         async function initLottie() {
             const sections = document.querySelectorAll(".section");
             sections.forEach(((section, index) => {
@@ -6143,30 +6185,29 @@
             let animationWrapper = document.querySelector("#animation-wrapper");
             if (window.innerWidth > 767.98) {
                 if (lenis.targetScroll === 0) {
-                    document.documentElement.classList.add("lock");
+                    bodyLockToggle();
                     lenis.stop();
-                }
+                    isStartAnimated = false;
+                } else isStartAnimated = true;
                 let animation = null;
                 let animationFrames = null;
+                let animationObj = await loadAnimation(PATH, animationWrapper).then((animationObject => {
+                    animation = animationObject;
+                    animationFrames = animationObject.totalFrames;
+                    return animationObject;
+                }));
+                if (!isStartAnimated) animationObj.playSegments([ 0, START_OFFSET ], true);
                 ScrollTrigger_ScrollTrigger.create({
                     trigger: animationLayout,
                     start: "1px top",
                     end: "bottom bottom",
-                    onEnter: triggerEvent => {
-                        console.log("enter");
-                        loadAnimation(PATH, animationWrapper).then((animationObject => {
-                            animation = animationObject;
-                            animationFrames = animationObject.totalFrames;
-                        }));
-                    },
                     onUpdate: triggerEvent => {
-                        if (animation) animation.goToAndStop(triggerEvent.progress * animationFrames, true);
+                        if (animation) animation.goToAndStop(triggerEvent.progress * animationFrames + START_OFFSET - triggerEvent.progress * START_OFFSET, true);
                     }
                 });
             } else {
                 const animationHandler = new AnimationHandlerMobile(returnAnimationFiles());
                 await animationHandler.build();
-                console.log("build in listener");
                 sections.forEach(((section, index) => {
                     ScrollTrigger_ScrollTrigger.create({
                         trigger: section,

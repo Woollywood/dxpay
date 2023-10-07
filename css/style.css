@@ -727,6 +727,42 @@ html.lenis {
   .section__animation-layout {
     display: none;
   }
+
+  #section-0 {
+    height: max(70vh, 3.75rem);
+  }
+
+  #section-1 {
+    height: max(70vh, 3.75rem);
+  }
+
+  #section-2 {
+    height: max(70vh, 3.75rem);
+  }
+
+  #section-3 {
+    height: max(90vh, 3.75rem);
+  }
+
+  #section-4 {
+    height: max(60vh, 3.75rem);
+  }
+
+  #section-5 {
+    height: max(70vh, 3.75rem);
+  }
+
+  #section-6 {
+    height: max(50vh, 3.75rem);
+  }
+
+  #section-7 {
+    height: max(80vh, 3.75rem);
+  }
+
+  #section-8 {
+    height: max(110vh, 3.75rem);
+  }
 }
 
 @media (min-width: 90em) {
