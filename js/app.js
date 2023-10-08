@@ -6114,6 +6114,7 @@
             constructor(meta) {
                 this._meta = meta;
                 this._animationList = new Map;
+                this._animationCache = [];
             }
             async _buildAnimation() {
                 const animationSectionList = document.querySelectorAll(".section__animation-layout");
@@ -6146,7 +6147,11 @@
                 await this._buildAnimation();
             }
             play(animationIndex) {
-                this._animationList.get(this._meta[animationIndex].src).playSegments([ this._meta[animationIndex].startOffset, this._meta[animationIndex].endOffset ], true);
+                const animation = this._animationList.get(this._meta[animationIndex].src);
+                if (!this._animationCache.includes(animation)) {
+                    animation.playSegments([ this._meta[animationIndex].startOffset, this._meta[animationIndex].endOffset ], true);
+                    this._animationCache.push(animation);
+                }
             }
         }
         const PATH = "./files/lottie/data.json";
@@ -6208,6 +6213,7 @@
             } else {
                 const animationHandler = new AnimationHandlerMobile(returnAnimationFiles());
                 await animationHandler.build();
+                animationHandler.play(0);
                 sections.forEach(((section, index) => {
                     ScrollTrigger_ScrollTrigger.create({
                         trigger: section,
