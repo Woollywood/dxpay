@@ -59,6 +59,7 @@
 		"js-datepicker": "latest",
 		"lightgallery": "latest",
 		"load-plugins": "latest",
+		"locomotive-scroll": "^4.1.4",
 		"magicmouse.js": "^2.0.0",
 		"mini-css-extract-plugin": "2.4.7",
 		"mixitup": "^3.3.1",

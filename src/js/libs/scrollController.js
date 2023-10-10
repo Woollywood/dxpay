@@ -1,27 +1,8 @@
 import { gsap, ScrollTrigger } from 'gsap/all.js';
-import Lenis from '@studio-freight/lenis';
-import '../../scss/libs/lenis.scss';
+
+import { bodyLockStatus, bodyLockToggle, bodyLock, bodyUnlock } from '../custom/functions.js';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const lenis = new Lenis({
-	duration: 2,
-	easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-	direction: 'vertical',
-	gestureOrientation: 'vertical',
-	smooth: true,
-	mouseMultiplier: 1,
-	smoothTouch: false,
-	touchMultiplier: 2,
-	infinite: false,
-});
-
-function raf(time) {
-	lenis.raf(time);
-	requestAnimationFrame(raf);
-}
-
-requestAnimationFrame(raf);
 
 document.addEventListener('DOMContentLoaded', () => {
 	if (document.querySelector('#animation-layout')) initLottie();
@@ -31,6 +12,7 @@ class AnimationHandlerMobile {
 	constructor(meta) {
 		this._meta = meta;
 		this._animationList = new Map();
+		this._animationCache = [];
 	}
 
 	async _buildAnimation() {
@@ -77,11 +59,21 @@ class AnimationHandlerMobile {
 	}
 
 	play(animationIndex) {
-		this._animationList
-			.get(this._meta[animationIndex].src)
-			.playSegments([this._meta[animationIndex].startOffset, this._meta[animationIndex].endOffset], true);
+		const animation = this._animationList.get(this._meta[animationIndex].src);
+		if (!this._animationCache.includes(animation)) {
+			animation.playSegments(
+				[this._meta[animationIndex].startOffset, this._meta[animationIndex].endOffset],
+				true
+			);
+			this._animationCache.push(animation);
+		}
 	}
 }
+
+const PATH = './files/lottie/data.json';
+const START_OFFSET = 74;
+const END_OFFSET = 1060;
+let isStartAnimated;
 
 function loadAnimation(path, container) {
 	return new Promise((resolve, reject) => {
@@ -91,14 +83,20 @@ function loadAnimation(path, container) {
 			loop: false,
 			autoplay: false,
 			path,
+			progressiveLoad: true,
 		});
 
 		animation.addEventListener('enterFrame', (e) => {
 			console.log(e);
 		});
 
+		animation.addEventListener('complete', (e) => {
+			if (!isStartAnimated) {
+				// bodyLockToggle();
+			}
+		});
+
 		animation.addEventListener('DOMLoaded', () => {
-			console.log('loaded');
 			resolve(animation);
 		});
 
@@ -107,8 +105,6 @@ function loadAnimation(path, container) {
 		});
 	});
 }
-
-const PATH = './files/lottie/data.json';
 
 async function initLottie() {
 	const sections = document.querySelectorAll('.section');
@@ -121,33 +117,47 @@ async function initLottie() {
 	let animationWrapper = document.querySelector('#animation-wrapper');
 
 	if (window.innerWidth > 767.98) {
-		if (lenis.targetScroll === 0) {
-			document.documentElement.classList.add('lock');
-			lenis.stop();
+		if (window.scrollY === 0) {
+			bodyLockToggle();
+			isStartAnimated = false;
+		} else {
+			isStartAnimated = true;
 		}
 
 		let animation = null;
 		let animationFrames = null;
 
+		let animationObj = await loadAnimation(PATH, animationWrapper).then((animationObject) => {
+			animation = animationObject;
+			animationFrames = animationObject.totalFrames;
+			return animationObject;
+		});
+
+		if (!isStartAnimated) {
+			animationObj.playSegments([1, START_OFFSET], true);
+		}
+
 		ScrollTrigger.create({
 			trigger: animationLayout,
 			start: '1px top',
 			end: 'bottom bottom',
-			onEnter: (triggerEvent) => {
-				console.log('enter');
-				loadAnimation(PATH, animationWrapper).then((animationObject) => {
-					animation = animationObject;
-					animationFrames = animationObject.totalFrames;
-				});
-			},
 			onUpdate: (triggerEvent) => {
-				if (animation) animation.goToAndStop(triggerEvent.progress * animationFrames, true);
+				if (animation) {
+					let progress =
+						triggerEvent.progress * animationFrames + START_OFFSET - triggerEvent.progress * START_OFFSET;
+
+					if (progress >= END_OFFSET) {
+						progress = END_OFFSET;
+					}
+
+					animation.goToAndStop(progress, true);
+				}
 			},
 		});
 	} else {
 		const animationHandler = new AnimationHandlerMobile(returnAnimationFiles());
 		await animationHandler.build();
-		console.log('build in listener');
+		animationHandler.play(0);
 		sections.forEach((section, index) => {
 			ScrollTrigger.create({
 				trigger: section,
