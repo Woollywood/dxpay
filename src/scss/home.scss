@@ -17,7 +17,10 @@
 	width: 100%;
 	background: linear-gradient(#fff2d9 0%, #f5d6b8 100%);
 	pointer-events: none;
-	// overflow: hidden;
+
+	@media (min-width: $mobile) {
+		margin-bottom: calc(var(--footer-height) * -1);
+	}
 
 	display: flex;
 	justify-content: center;

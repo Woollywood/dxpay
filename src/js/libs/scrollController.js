@@ -86,6 +86,12 @@ function loadAnimation(path, container) {
 			progressiveLoad: true,
 		});
 
+		animation.addEventListener('complete', e => {
+			if (!isStartAnimated) {
+				bodyLockToggle();
+			}
+		})
+
 		animation.addEventListener('DOMLoaded', () => {
 			resolve(animation);
 		});
@@ -124,16 +130,7 @@ async function initLottie() {
 		});
 
 		if (!isStartAnimated) {
-			let currentFrame = 0;
-			setTimeout(function animate() {
-				animationObj.goToAndStop(currentFrame++, true);
-				if (currentFrame >= START_OFFSET) {
-					isStartAnimated = true;
-					bodyLockToggle();
-					return;
-				}
-				setTimeout(animate, 40);
-			}, 40);
+			animationObj.playSegments([0, START_OFFSET], true);
 		}
 
 		ScrollTrigger.create({
